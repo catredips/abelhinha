@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>abelhinha</title>
+    <link rel="icon" href="bee.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 aPosition;
+        attribute vec3 aNormal;
+        attribute vec2 aTexCoord;
+        varying vec2 vTexCoord;
+
+       
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+        uniform mat3 uNormalMatrix;
+
+        
+        uniform vec4 uAmbientProduct, uDiffuseProduct, uSpecularProduct;
+        uniform vec4 uLightPosition;
+        uniform float uShininess;
+
+
+        varying vec4 vColor;
+
+        void main() {
+            vec3 pos = (uModelViewMatrix * aPosition).xyz;
+            vec3 N = normalize(uNormalMatrix * aNormal);
+            vec3 L = normalize(uLightPosition.xyz - pos);
+            vec3 V = -normalize(pos);
+            vec3 R = reflect(-L, N);
+            vTexCoord = aTexCoord;
+            
+            vec4 ambient = uAmbientProduct;
+            
+            float kd = max(dot(L, N), 0.0);
+            vec4 diffuse = kd * uDiffuseProduct;
+            
+            float ks = pow(max(dot(R, V), 0.0), uShininess);
+            vec4 specular = ks * uSpecularProduct;
+            if (dot(L, N) < 0.0) {
+                specular = vec4(0.0, 0.0, 0.0, 1.0);
+            }
+            
+            gl_Position = uProjectionMatrix * uModelViewMatrix * aPosition;
+            vec4 final_color_rgb = ambient + diffuse + specular;
+            vColor = vec4(final_color_rgb.rgb, uAmbientProduct.a);
+        } 
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec4 vColor;
+        varying vec2 vTexCoord;
+        uniform sampler2D uTextureMap;
+        uniform bool useTexture;
+    
+        void main() {
+        // se useTexture for true, aplica a textura, senão usa a cor vColor
+            if(useTexture){ 
+                gl_FragColor = vColor * texture2D(uTextureMap, vTexCoord);
+            } else {
+                gl_FragColor = vColor;
+            }
+        }
+    </script>
+
+    <script src="MV.js"></script>
+    <script src="initShaders.js"></script>
+    <script src="script.js"></script> 
+</head>
+<body>
+    <canvas id="gl-canvas"></canvas>
+    <div class="controles">
+        <div class="grupo-botoes">
+             <button id="botaoPousar">Pousar Abelha</button>
+             <button id="botaoVoltar">Voltar Abelha</button>
+        </div>
+        <div class="controle-zoom">
+            <input type="range" id="zoomSlider" min="2.0" max="30.0" value="15.0" step="0.1">
+        </div>
+    </div>
+</body>
+</html>
