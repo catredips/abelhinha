@@ -4,5 +4,5 @@
 "Para nós, este projeto foi um verdadeiro desafio prático no universo da computação gráfica. Tivemos a chance de trabalhar juntos em tudo, desde a matemática por trás das matrizes de transformação até a lógica dos shaders. Estamos orgulhosos do resultado: uma aplicação web interativa e dinâmica que nossa equipe construiu do início ao fim usando apenas WebGL e JavaScript."
 
 Alunos:
-🐝 Leticia Rodrigues de Sousa                 🐝 Katherine Maria Carvalho da Silva
-🐝 Geovanna Duarte do Nascimento              🐝 Pedro Henrique de Sousa Jatobá
+🐝 Leticia Rodrigues de Sousa                       🐝 Katherine Maria Carvalho da Silva
+🐝 Geovanna Duarte Nascimento da Silva              🐝 Pedro Henrique de Sousa Jatobá
